@@ -30,10 +30,24 @@ Route::get('my_tickets', 'TicketsController@userTickets');
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
 	Route::get('create', 'AdminController@create_user');
 	Route::post('create', 'AdminController@store');
+	
     Route::get('tickets', 'TicketsController@index');
     Route::post('close_ticket/{ticket_id}', 'TicketsController@close');
-
+	
+	Route::post('update/{ticket_id}', 'TicketsController@update');
 });
 
+Route::get('agent/tickets', 'AgentController@tickets');
+Route::post('agent/close_ticket/{ticket_id}', 'AgentController@close');
+	
 Route::post('comment', 'CommentsController@postComment');
 
+
+Route::get('storage/{archivo}', function ($archivo) {
+   $public_path = public_path();
+   $url = $public_path.'/storage/'.$archivo;
+   if (Storage::exists($archivo)){
+     return response()->download($url);
+   }
+  return redirect()->back()->with("success", "can't find the archive");
+});

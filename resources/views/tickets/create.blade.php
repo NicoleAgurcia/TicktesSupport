@@ -10,7 +10,7 @@
           <div class="panel-body">
             @include('includes.flash')
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ url('/new_ticket') }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ url('/new_ticket') }}" accept-charset="UTF-8" enctype="multipart/form-data">
               {!! csrf_field() !!}
 
               <div class="form-group{{ $errors->has('title') ? ' has-error' : '' }}">
@@ -71,6 +71,14 @@
                       <strong>{{ $errors->first('message') }}</strong>
                     </span>
                   @endif
+                </div>
+              </div>
+
+              <input type="hidden" name="_token" value="{{ csrf_token() }}">
+              <div class="form-group">
+                <label class="col-md-4 control-label">Archive</label>
+                <div class="col-md-6">
+                  <input type="file" class="form-control" value="" name="file"  id="file" multiple/>
                 </div>
               </div>
 

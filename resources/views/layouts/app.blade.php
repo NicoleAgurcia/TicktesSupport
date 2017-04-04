@@ -13,10 +13,8 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.6 -->
   <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="/vendor/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+
   <!-- Theme style -->
   <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -24,19 +22,14 @@
   <link rel="stylesheet" href="/dist/css/skins/_all-skins.min.css">
 
 
- <link rel="stylesheet" href="/dist/css/skins/_all-skins.min.css">
+  <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="/vendor/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-  <![endif]-->
    <script>
-        window.Laravel = <?php echo json_encode([
-            'csrfToken' => csrf_token(),
-        ]); ?>
+      window.Laravel = <?php echo json_encode([
+        'csrfToken' => csrf_token(),
+      ]); ?>
     
     </script>
 </head>
@@ -103,8 +96,17 @@
           <img src="../../dist/img/user.png" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>{{Auth::user()->name}}</p>
-          <a href="#"><i class="fa fa-circle text-success"></i>Online</a>
+        
+          <div>
+             <span ><b>{{Auth::user()->name}}  </b><i class="fa fa-circle fa-1 text-success" ></i>Online</span>
+          </div>  
+          @if (Auth::user()->rol==1)
+            <p>Rol: Admin</p>
+          @elseif (Auth::user()->rol==2)
+            <p>Rol: Agent</p>
+          @else
+            <p>Rol: User</p>
+          @endif          
         </div>
       </div>
   
@@ -113,20 +115,6 @@
            <li class="treeview"><a href="{{ url('/') }}">
              <i class="fa fa-home"></i> <span>Home</span>  
            </a></li>
-<!--         <li class="treeview">
-          <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="../../index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-            <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-          </ul>
-
-        </li>   -->
-
         @if (Auth::user()->rol==1)
           <li class="treeview">
             <a href="{{ url('admin/tickets') }}">
@@ -138,6 +126,12 @@
               <i class="fa fa-user-plus"></i> <span>Create User</span>  
             </a>
           </li>
+        @elseif(Auth::user()->rol==2)
+         <li class="treeview">
+            <a href="{{ url('agent/tickets') }}">
+              <i class="fa fa-ticket"></i> <span>Assigned tickets</span>  
+            </a>
+          </li>         
         @else
           <li class="treeview">
             <a href="{{ url('my_tickets') }}">
@@ -185,7 +179,13 @@
 </div>
 <!-- ./wrapper -->
 <!-- jQuery 2.2.3 -->
-<script src="/vendor/jQuery/jquery-2.2.3.min.js"></script>
+
+
+<script type="text/javascript" src="/vendor/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="/vendor/moment/min/moment.min.js"></script>
+
+<script type="text/javascript" src="/vendor/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+
 <!-- Bootstrap 3.3.6 -->
 <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!-- FastClick -->
@@ -195,11 +195,19 @@
 <!-- AdminLTE for demo purposes -->
 <script src="/dist/js/demo.js"></script>
 <!-- TEXT EDITOR -->
-<script>
+     <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker({
+                    format:'YYYY-MM-DD HH:mm:ss'
+
+                });
+            });
+        </script>
+<!-- <script>
   $(function () {
     CKEDITOR.replace('editor1');
     $(".textarea").wysihtml5();
   });
-</script>
+</script> -->
 </body>
 </html>

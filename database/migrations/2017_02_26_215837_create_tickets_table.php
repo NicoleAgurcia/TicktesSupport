@@ -16,8 +16,10 @@ class CreateTicketsTable extends Migration
       $table->increments('id');
       $table->integer('user_id')->unsigned();
       $table->integer('agent_id')->unsigned()->default(1);
+      $table->dateTime('sla')->default(DB::raw('CURRENT_TIMESTAMP')); 
       $table->integer('category_id')->unsigned();
       $table->string('ticket_id')->unique();
+      $table->string('doc_path')->nullable();
       $table->string('title');
       $table->string('priority');
       $table->text('message');

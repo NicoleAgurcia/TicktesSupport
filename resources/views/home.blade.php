@@ -18,6 +18,8 @@
                 <h3>{{$total_user}}</h3>
               @if (Auth::user()->rol==1)
                 <p>All Tickets</p>
+              @elseif(Auth::user()->rol==2)
+                <p>All assigned Tickets</p>
               @else
                 <p>All my tickets sent</p>
               @endif
@@ -66,30 +68,34 @@
               <th style="text-align:center">Category</th>
               <th style="text-align:center">Title</th>
               <th style="text-align:center">Status</th>
+              <th style="text-align:center">Priority</th>
               <th style="text-align:center" >Last Updated</th>
+               @if (Auth::user()->rol==2 or Auth::user()->rol==1)
               <th style="text-align:center" colspan="2">Actions</th>
+              @endif
             </tr>
             @foreach ($tickets_closed as $ticket)
               <tr>
-                <td>
+                <td align="center">
                   @foreach ($categories as $category)
                     @if ($category->id === $ticket->category_id)
                       {{ $category->name }}
                     @endif
                   @endforeach
                 </td>                 
-                <td>
+                <td align="center">
                   <a href="{{ url('tickets/'. $ticket->ticket_id) }}">
                     #{{ $ticket->ticket_id }} - {{ $ticket->title }}
                   </a>
                 </td>
-                <td>
+                <td align="center">
                   @if ($ticket->status === 'Open')
                     <span class="btn btn-block btn-success btn-xs">{{ $ticket->status }}</span>
                   @else
                     <span class="btn btn-block btn-danger btn-xs">{{ $ticket->status }}</span>
                   @endif
                 </td>
+                <td  align="center" >{{ $ticket->priority }}</td>
                 <td  align="center" >{{ $ticket->updated_at }}</td>
 
                 @if (Auth::user()->rol==1)
@@ -99,6 +105,19 @@
                   @if ($ticket->status !== 'Closed')
                     <td>
                       <form   align="center"  action="{{ url('admin/close_ticket/' . $ticket->ticket_id) }}" method="POST">
+                      {!! csrf_field() !!}
+                        <button type="submit" class="btn btn-danger">Close</button>
+                      </form>
+                    </td>
+                  @endif
+                @endif
+                @if (Auth::user()->rol==2)
+                  <td  align="center">
+                    <a href="{{ url('tickets/' . $ticket->ticket_id) }}"  class="btn btn-primary">Comment</a>
+                  </td>
+                  @if ($ticket->status !== 'Closed')
+                    <td>
+                      <form   align="center"  action="{{ url('agent/close_ticket/' . $ticket->ticket_id) }}" method="POST">
                       {!! csrf_field() !!}
                         <button type="submit" class="btn btn-danger">Close</button>
                       </form>
@@ -128,30 +147,34 @@
               <th style="text-align:center">Category</th>
               <th style="text-align:center">Title</th>
               <th style="text-align:center">Status</th>
+              <th style="text-align:center">Priority</th>
               <th style="text-align:center" >Last Updated</th>
+               @if (Auth::user()->rol==2 or Auth::user()->rol==1)
               <th style="text-align:center" colspan="2">Actions</th>
+              @endif
             </tr>
             @foreach ($tickets_open as $ticket)
               <tr>
-                <td>
+                <td align="center">
                   @foreach ($categories as $category)
                     @if ($category->id === $ticket->category_id)
                       {{ $category->name }}
                     @endif
                   @endforeach
                 </td>                 
-                <td>
+                <td align="center">
                   <a href="{{ url('tickets/'. $ticket->ticket_id) }}">
                     #{{ $ticket->ticket_id }} - {{ $ticket->title }}
                   </a>
                 </td>
-                <td>
+                <td align="center">
                   @if ($ticket->status === 'Open')
                     <span class="btn btn-block btn-success btn-xs">{{ $ticket->status }}</span>
                   @else
                     <span class="btn btn-block btn-danger btn-xs">{{ $ticket->status }}</span>
                   @endif
                 </td>
+                <td  align="center" >{{ $ticket->priority }}</td>
                 <td  align="center" >{{ $ticket->updated_at }}</td>
 
                 @if (Auth::user()->rol==1)
@@ -161,6 +184,19 @@
                   @if ($ticket->status !== 'Closed')
                     <td>
                       <form   align="center"  action="{{ url('admin/close_ticket/' . $ticket->ticket_id) }}" method="POST">
+                      {!! csrf_field() !!}
+                        <button type="submit" class="btn btn-danger">Close</button>
+                      </form>
+                    </td>
+                  @endif
+                @endif
+                  @if (Auth::user()->rol==2)
+                  <td  align="center">
+                    <a href="{{ url('tickets/' . $ticket->ticket_id) }}"  class="btn btn-primary">Comment</a>
+                  </td>
+                  @if ($ticket->status !== 'Closed')
+                    <td>
+                      <form   align="center"  action="{{ url('agent/close_ticket/' . $ticket->ticket_id) }}" method="POST">
                       {!! csrf_field() !!}
                         <button type="submit" class="btn btn-danger">Close</button>
                       </form>

@@ -1,96 +1,142 @@
-@extends('layouts.app')
+  @extends('layouts.app')
 
-@section('title', $ticket->title)
+@section('title', 'Detail of ticket')
 
 @section('content')
+  <link rel="stylesheet" href="/css/show.css">
 
 <div class="col-md-10 col-md-offset-1">
   <div class="panel panel-default">
     <div class="panel-heading">#{{ $ticket->ticket_id }} - {{ $ticket->title }}</div>
     <div class="panel-body">
       @include('includes.flash')
-      <section >
-        <div class="row">
-          <div class="col-md-6">
-            <form role="form">
-             <div class="ticket-info">
-                <p class="lead">Category: {{ $category->name }}</p>
-                <p class="lead">
+       <div class="row">
+        <fieldset class="for-panel">
+          <legend>Ticket Info</legend>
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-horizontal">               
+                <label class="col-xs-5 control-label">Category:</label>
+                <p class="form-control-static">{{ $category->name }}</p>               
+               
+                <label class="col-xs-5 control-label">Status: </label>
                 @if ($ticket->status === 'Open')
-                  Status: <span class="label label-success">{{ $ticket->status }}</span>
+                  <p class="form-control-static">{{ $ticket->status }}</p>
                 @else
-                  Status: <span class="label label-danger">{{ $ticket->status }}</span>
+                  <p class="form-control-static">{{ $ticket->status }}</p>
                 @endif
-                </p>
-                <p class="lead">Created on: {{ $ticket->created_at->diffForHumans() }}</p> 
-                <p class="lead"> Message</p>   
-                <h5 class="col-md-offset-1">{{ $ticket->message }}</h5>
+                            
+                <label class="col-xs-5 control-label">Created on:</label>
+                <p class="form-control-static">{{ $ticket->created_at->diffForHumans() }}</p>     
+
+                <label class="col-xs-5 control-label">SLA:</label>
+                <p class="form-control-static">{{ $ticket->sla }}</p> 
               </div>
-            </form>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-horizontal">               
+                <label class="col-xs-4 control-label">Priority: </label>
+                <p class="form-control-static">{{ $ticket->priority }}</p>             
+                             
+                <label class="col-xs-4 control-label">Archive:</label>
+                @if (is_null($ticket->doc_path))
+                  <p class="form-control-static">
+                    <button class="btn btn-default btn-flat disabled" href="/storage/{{$ticket->doc_path}}">
+                      <i class="fa fa-file fa-lg"></i> {{$ticket->doc_path}}
+                    </button>
+                  </p>
+                @else
+                  <p class="form-control-static">
+                    <a class="btn btn-default btn-flat" href="/storage/{{$ticket->doc_path}}">
+                      <i class="fa fa-file fa-lg"></i> {{$ticket->doc_path}}
+                    </a>
+                  </p>
+                @endif
+
+                <label class="col-xs-4 control-label">Message:</label>
+                <p class="form-control-static">{{ $ticket->message }}</p>                        
+              </div>
+            </div>
           </div>
-          @if (Auth::user()->rol==1)
-            <div class="col-md-6">
-              <form class="form-horizontal" action="{{ url('admin/close_ticket/' . $ticket->ticket_id) }}" method="POST">
-              {!! csrf_field() !!}
-                <div class="box-body">
-                  <div class="form-group{{ $errors->has('user') ? ' has-error' : '' }}">
-                    <p>Assign to: 
-                    <select style="width: 250px;" id="user" type="user" class="form-control" name="user">
-                      @foreach ($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+        </fieldset>
+      </div>
+      @if (Auth::user()->rol==1)
+        <hr>
+        <div class="row">
+          <form class="form-horizontal" action="{{url('admin/update/'.$ticket->ticket_id)}}" method="POST">
+          {!! csrf_field() !!}
+          <fieldset class="for-panel">
+            <div class="row">
+              <div class="col-sm-5">
+                <div class="form-horizontal">               
+                  <label class="col-xs-3 control-label">Agent:</label>
+                  <p class="form-control-static{{ $errors->has('agent_id') ? ' has-error' : '' }}">
+                    <select style="width: 250px;" id="agent_id" class="control" type="agent_id" name="agent_id">
+                      @foreach ($users as $agent_id)
+                        <option value="{{ $agent_id->id }}">{{ $agent_id->name }}</option>
                       @endforeach
-                    </select>
-                    </p>
-                    @if ($errors->has('user'))
+                    </select>         
+                    @if ($errors->has('agent_id'))
                       <span class="help-block">
-                        <strong>{{ $errors->first('user') }}</strong>
+                        <strong>{{ $errors->first('agent_id') }}</strong>
                       </span>
                     @endif
-                  </div>
-                </div>                    
-              </form>
+                  </p>                              
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div class="form-horizontal">               
+                  <label class="col-xs-2 control-label">SLA: </label>
+                  <p class="form-control-static">
+                    <a class='input-group date' id='datetimepicker1' name="datetimepicker1">
+                      <input id='sla' name='sla' type='text' value="{{ $ticket->sla }}" class="control" required="" />
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </a>
+                  </p>                                
+                </div>
+              </div>
+            <div class="col-sm-2"> 
+                <button type="submit" class="btn btn-block btn-default btn-flat">UPDATE</button>          
             </div>
-          </div>
-        @endif
-      </section>
+            </div>
+          </fieldset>
+         </form>
+        </div>
+       @endif  
 
       <hr>
+      <div class="box-body">
+        <div class="direct-chat-messages">
+          @foreach ($comments as $comment)
+            @if($ticket->user->id === $comment->user_id) 
+            <div class="direct-chat-msg">
+              <div class="direct-chat-info clearfix">
+                <span class="direct-chat-name pull-left"> {{ $comment->user->name }}</span>
+                <span class="direct-chat-timestamp pull-right">{{ $comment->created_at->format('Y-m-d') }}</span>
+              </div>
+              <img class="direct-chat-img" src="../dist/img/user.png" alt="Message User Image">
 
-      <div class="col-md-12">
-        <div class="direct-chat-primary">
-          <div class="box-body">
-            <div class="direct-chat-messages">
-              @foreach ($comments as $comment)
-                @if($ticket->user->id === $comment->user_id) 
-                <div class="direct-chat-msg">
-                  <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left"> {{ $comment->user->name }}</span>
-                    <span class="direct-chat-timestamp pull-right">{{ $comment->created_at->format('Y-m-d') }}</span>
-                  </div>
-                  <img class="direct-chat-img" src="../dist/img/user.png" alt="Message User Image">
-
-                  <div class="direct-chat-text">
-                     {{ $comment->comment }} 
-                  </div>
-                </div>
-                @else
-                <div class="direct-chat-msg right">
-                  <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-right"> {{ $comment->user->name }}</span>
-                    <span class="direct-chat-timestamp pull-left">{{$comment->created_at->format('Y-m-d')}}</span>
-                  </div>
-                  <img class="direct-chat-img" src="../dist/img/support.png" alt="Message User Image">
-                  <div class="direct-chat-text" >
-                     {{ $comment->comment }} 
-                  </div>
-                </div>
-                @endif
-              @endforeach
+              <div class="direct-chat-text">
+                 {{ $comment->comment }} 
+              </div>
             </div>
-          </div>
+            @else
+            <div class="direct-chat-msg right">
+              <div class="direct-chat-info clearfix">
+                <span class="direct-chat-name pull-right"> {{ $comment->user->name }}</span>
+                <span class="direct-chat-timestamp pull-left">{{$comment->created_at->format('Y-m-d')}}</span>
+              </div>
+              <img class="direct-chat-img" src="../dist/img/support.png" alt="Message User Image">
+              <div class="direct-chat-text" >
+                 {{ $comment->comment }} 
+              </div>
+            </div>
+            @endif
+          @endforeach
         </div>
       </div>
-
       <div class="comment-form">
         <form action="{{ url('comment') }}" method="POST" class="form">
           {!! csrf_field() !!}
@@ -112,3 +158,4 @@
   </div>
 </div>
 @endsection
+
