@@ -1,5 +1,3 @@
-// ticket_info.blade.php file
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

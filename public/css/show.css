@@ -12,27 +12,27 @@
 
 fieldset.for-panel {
 	width:90%;
-    background-color: #fcfcfc;
+  background-color: #fcfcfc;
 	border: 1px solid #999;
 	border-radius: 4px;	
 	padding:15px 10px;
 	background-color: #d9edf7;
-    border-color: #bce8f1;
+  border-color: #bce8f1;
 	background-color: #f9fdfd;
 	margin-bottom:12px;
 	margin: auto;
 }
 
 fieldset.for-panel legend {	
-    background-color: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    color: #4381ba;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 10px;
-    padding: 7px;
-    width: auto;
+  background-color: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  color: #4381ba;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 10px;
+  padding: 7px;
+  width: auto;
 	background-color: #d9edf7;
 	margin-bottom: 0;
 }

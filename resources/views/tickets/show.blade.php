@@ -66,11 +66,10 @@
           <form class="form-horizontal" action="{{url('admin/update/'.$ticket->ticket_id)}}" method="POST">
           {!! csrf_field() !!}
           <fieldset class="for-panel">
-            <div class="row">
-              <div class="col-sm-5">
+              <div class="col-sm-6">
                 <div class="form-horizontal">               
-                  <label class="col-xs-3 control-label">Agent:</label>
                   <p class="form-control-static{{ $errors->has('agent_id') ? ' has-error' : '' }}">
+                  <label class="col-xs-2 control-label">Agent:</label>
                     <select style="width: 250px;" id="agent_id" class="control" type="agent_id" name="agent_id">
                       @foreach ($users as $agent_id)
                         <option value="{{ $agent_id->id }}">{{ $agent_id->name }}</option>
@@ -86,8 +85,8 @@
               </div>
               <div class="col-sm-5">
                 <div class="form-horizontal">               
-                  <label class="col-xs-2 control-label">SLA: </label>
                   <p class="form-control-static">
+                  <label class="col-xs-2 control-label">SLA: </label>
                     <a class='input-group date' id='datetimepicker1' name="datetimepicker1">
                       <input id='sla' name='sla' type='text' value="{{ $ticket->sla }}" class="control" required="" />
                       <span class="input-group-addon">
@@ -97,9 +96,8 @@
                   </p>                                
                 </div>
               </div>
-            <div class="col-sm-2"> 
+            <div class="pull-right"> 
                 <button type="submit" class="btn btn-block btn-default btn-flat">UPDATE</button>          
-            </div>
             </div>
           </fieldset>
          </form>
