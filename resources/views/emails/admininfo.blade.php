@@ -5,8 +5,9 @@
     <title>Suppor Ticket Information</title>
 </head>
 <body>
+      
     <p>
-        Thank you {{ ucfirst($user->name) }} for contacting our support team. A support ticket has been opened for you. You will be notified when a response is made by email. The details of your ticket are shown below:
+        A new ticket has been create by {{ ucfirst($ticketOwner->name) }}
     </p>
 
     <p>Title: {{ $ticket->title }}</p>
@@ -16,10 +17,5 @@
     <p>
         You can view the ticket at any time at {{ url('tickets/'. $ticket->ticket_id) }}
     </p>
-
-     <h3>
-        In a few minutes you're going to receive the time when your ticket will be solved (SLA)
-    </h3>
-
 </body>
 </html>

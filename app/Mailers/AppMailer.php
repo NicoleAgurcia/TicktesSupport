@@ -28,6 +28,16 @@ class AppMailer {
         return $this->deliver();
     }
 
+   public function sendSupport($ticketOwner, Ticket $ticket)
+    {
+        $this->to = 'agurcia202@gmail.com';
+        $this->subject = "[Ticket ID: $ticket->ticket_id] $ticket->title";
+        $this->view = 'emails.admininfo';
+        $this->data = compact('ticketOwner', 'ticket');
+
+        return $this->deliver();
+    }
+
     public function sendTicketComments($ticketOwner, $user, Ticket $ticket, $comment){
         $this->to = $ticketOwner->email;
         $this->subject = "RE: $ticket->title (Ticket ID: $ticket->ticket_id)";
@@ -46,6 +56,14 @@ class AppMailer {
         return $this->deliver();
     }
 
+    public function sla_information($ticketOwner, Ticket $ticket){
+        $this->to = $ticketOwner->email;
+        $this->subject = "RE: $ticket->title (Ticket ID: $ticket->ticket_id)";
+        $this->view = 'emails.sla_information';
+        $this->data = compact('ticketOwner', 'ticket');
+
+        return $this->deliver();
+    }
     public function deliver()
     {
         $this->mailer->send($this->view, $this->data, function($message) {

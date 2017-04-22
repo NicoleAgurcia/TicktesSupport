@@ -30,9 +30,12 @@ Route::get('my_tickets', 'TicketsController@userTickets');
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
 	Route::get('create', 'AdminController@create_user');
 	Route::post('create', 'AdminController@store');
-	
-    Route::get('tickets', 'TicketsController@index');
-    Route::post('close_ticket/{ticket_id}', 'TicketsController@close');
+  
+  Route::get('category', 'AdminController@create_category');
+  Route::post('category', 'AdminController@store_category');
+
+  Route::get('tickets', 'TicketsController@index');
+  Route::post('close_ticket/{ticket_id}', 'TicketsController@close');
 	
 	Route::post('update/{ticket_id}', 'TicketsController@update');
 });

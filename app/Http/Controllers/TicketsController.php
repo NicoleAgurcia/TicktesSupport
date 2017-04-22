@@ -97,9 +97,8 @@ class TicketsController extends Controller{
     ]);
 
     $ticket->save();
-
+    $ticketOwner = $ticket->user;
     $mailer->sendTicketInformation(Auth::user(), $ticket);
-
     return redirect()->back()->with("status", "A ticket with ID: #$ticket->ticket_id has been opened.");
   }
 
@@ -109,6 +108,9 @@ public function update(Request $request, AppMailer $mailer, $ticket_id){
     $ticket->agent_id = $request->input('agent_id');
     $ticket->sla = $request->input('sla') ; 
     $ticket->save();
+       
+    $ticketOwner = $ticket->user;
+    $mailer->sla_information($ticketOwner, $ticket);
     return redirect()->back()->with("status", "Ticket has been updated!");
   }
 

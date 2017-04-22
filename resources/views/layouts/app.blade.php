@@ -126,6 +126,11 @@
               <i class="fa fa-user-plus"></i> <span>Create User</span>  
             </a>
           </li>
+          <li class="treeview">
+            <a href="{{ url('admin/category') }}">
+              <i class="fa fa-th-large"></i> <span>Category</span>  
+            </a>
+          </li>
         @elseif(Auth::user()->rol==2)
          <li class="treeview">
             <a href="{{ url('agent/tickets') }}">
